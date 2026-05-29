@@ -1,0 +1,33 @@
+const express=require('express')
+const db=require('./models/db')
+const userEntity=require('./models/userentity')
+const loginSignupRoute=require('./routes/loginSignupRoutes')
+
+const app=express()
+const port=5000
+
+app.use(express.json())
+app.use('/user',loginSignupRoute)
+
+app.get('/',(req,res)=>{
+    res.send('Home page')
+})
+app.use((req,res)=>{
+    res.send('<h1>Page not found</h1>')
+})
+const server=async ()=>{
+    try {
+        await db.authenticate()
+        console.log('database connected');
+        await db.sync({alter:true})
+        app.listen(port,()=>{
+    console.log(`Server run on ${port}`);
+    
+})
+        
+    } catch (error) {
+        console.log(error);
+        
+    }
+}
+server()
