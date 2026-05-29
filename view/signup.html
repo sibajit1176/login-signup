@@ -1,46 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sign Up Page</title>
-  <link rel="stylesheet" href="style.css" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sign Up Page</title>
+    <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
 
-  <div class="signup-container">
-    <form class="signup-form">
-      <h2>Create Account</h2>
+    <div class="signup-container">
+        <form class="signup-form">
+            <h2>Create Account</h2>
 
-      <div class="input-group">
-        <label for="inputName">Full Name</label>
-        <input type="text" placeholder="Enter your full name" required id="inputName"/>
-      </div>
+            <div class="input-group">
+                <label for="inputName">Full Name</label>
+                <input type="text" placeholder="Enter your full name" required id="inputName" />
+            </div>
 
-      <div class="input-group">
-        <label for="email">Email</label>
-        <input type="email" placeholder="Enter your email" required id="inputEmail"/>
-      </div>
+            <div class="input-group">
+                <label for="email">Email</label>
+                <input type="email" placeholder="Enter your email" required id="inputEmail" />
+            </div>
 
-      <div class="input-group">
-        <label for="pass">Password</label>
-        <input type="password" placeholder="Enter password" required id="pass"/>
-      </div>
+            <div class="input-group">
+                <label for="pass">Password</label>
+                <input type="password" placeholder="Enter password" required id="pass" />
+            </div>
 
-      <div class="input-group">
-        <label for="cpass">Confirm Password</label>
-        <input type="password" placeholder="Confirm password" required id="cpass"/>
-      </div>
+            <div class="input-group">
+                <label for="cpass">Confirm Password</label>
+                <input type="password" placeholder="Confirm password" required id="cpass" />
+            </div>
 
-      <button type="submit">Sign Up</button>
+            <button type="submit">Sign Up</button>
 
-      <p class="login-text">
-        Already have an account?
-        <a href="#">Login</a>
-      </p>
-    </form>
-  </div>
- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script src="./script.js"></script>
+            <p class="login-text">
+                Already have an account?
+                <a href="#" id="loginLink">Login</a>
+            </p>
+        </form>
+    </div>
+    <div class="signup-container" id="loginContainer" style="display: none;">
+
+        <form class="signup-form">
+            <h2>Login</h2>
+
+            <div class="input-group">
+                <label for="loginEmail">Email</label>
+                <input type="email" placeholder="Enter your email" required id="loginEmail" />
+            </div>
+
+            <div class="input-group">
+                <label for="loginPass">Password</label>
+                <input type="password" placeholder="Enter password" required id="loginPass" />
+            </div>
+
+            <button type="submit">Login</button>
+
+            <p class="login-text">
+                Don't have an account?
+                <a href="#" id="signupLink">Signup</a>
+            </p>
+
+        </form>
+
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="./script.js"></script>
 </body>
+
 </html>

@@ -1,4 +1,23 @@
 const signupForm=document.querySelector('.signup-form')
+const loginLink = document.querySelector('#loginLink');
+const signupLink = document.querySelector('#signupLink');
+
+const signupContainer = document.querySelector('.signup-container');
+const loginContainer = document.querySelector('#loginContainer');
+
+loginLink.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    signupContainer.style.display = 'none';
+    loginContainer.style.display = 'block';
+});
+
+signupLink.addEventListener('click', (e) => {
+    e.preventDefault();
+
+    signupContainer.style.display = 'block';
+    loginContainer.style.display = 'none';
+});
 
 signupForm.addEventListener('submit',(e)=>{
     e.preventDefault()
