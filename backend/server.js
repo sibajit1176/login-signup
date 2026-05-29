@@ -1,4 +1,5 @@
 const express=require('express')
+const cors=require('cors')
 const db=require('./models/db')
 const userEntity=require('./models/userentity')
 const loginSignupRoute=require('./routes/loginSignupRoutes')
@@ -7,6 +8,7 @@ const app=express()
 const port=5000
 
 app.use(express.json())
+app.use(cors())
 app.use('/user',loginSignupRoute)
 
 app.get('/',(req,res)=>{
