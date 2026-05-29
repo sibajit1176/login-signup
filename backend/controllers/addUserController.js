@@ -28,6 +28,29 @@ const addUser=async (req,res)=>{
      })
     }
 }
+const loginUser=async(req,res)=>{
+    try {
+        const {email,password}=req.body
+        const findUser=await userEntity.findOne({
+            where:{
+                userEmail:email
+            }
+        })
+        if(!findUser){
+           return res.status(404).send({
+                message:`${email} not found`
+            })
+        }
+        return res.status(200).send({
+                message:`${findUser.userName} loggedin`
+            })
+    } catch (error) {
+        return res.status(400).send({
+                message:`login errpr for ${error} `
+            })
+    }
+}
 module.exports={
-    addUser
+    addUser,
+    loginUser
 }
