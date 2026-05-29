@@ -41,11 +41,16 @@ const loginUser=async(req,res)=>{
                 message:`${email} not found`
             })
         }
+        if(findUser.password!==password){
+            return res.status(401).send({
+                message:`Wrong password`
+            })
+        }
         return res.status(200).send({
                 message:`${findUser.userName} loggedin`
             })
     } catch (error) {
-        return res.status(400).send({
+        return res.status(500).send({
                 message:`login errpr for ${error} `
             })
     }
