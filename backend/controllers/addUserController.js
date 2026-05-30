@@ -1,4 +1,8 @@
+const bcrypt=require('bcrypt')
 const userEntity=require('../models/userentity')
+
+const saltRound=10
+
 const addUser=async (req,res)=>{
     try {
         const {name,email,password}=req.body
@@ -12,10 +16,11 @@ const addUser=async (req,res)=>{
                 message:`${email} allready exists`
             })
         }
+        const hashPassword=await bcrypt.hash(password,saltRound)
         const addUser=await userEntity.create({
             userName:name,
             userEmail:email,
-            password:password
+            password:hashPassword
         })
      await addUser.save()
      res.status(201).send({
@@ -41,7 +46,9 @@ const loginUser=async(req,res)=>{
                 message:`${email} not found`
             })
         }
-        if(findUser.password!==password){
+        const originalPassword=await bcrypt.compare(password,findUser.password)
+
+        if(!originalPassword){
             return res.status(401).send({
                 message:`Wrong password`
             })
