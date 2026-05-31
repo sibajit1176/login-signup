@@ -32,7 +32,9 @@ const addExpense = async (req, res) => {
 }
 const getExpense = async (req, res) => {
     try {
-        const { userId } = Number(req.params.userId)
+        const userId  =Number( req.params.userId)
+        console.log(userId,typeof(userId));
+        
         if (!userId) {
             return res.status(404).send('userId not found')
         }
