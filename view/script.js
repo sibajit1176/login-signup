@@ -73,6 +73,8 @@ const loginuser=async(payload)=>{
  try {
     const res= await axios.post('http://localhost:5000/user/login',payload)
     alert(res.data.message)
+    window.location.href =
+            `expense.html?userId=${res.data.userId}`;
  } catch (error) {
     console.log(error);
     
