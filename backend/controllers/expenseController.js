@@ -33,14 +33,15 @@ const addExpense = async (req, res) => {
 const getExpense = async (req, res) => {
     try {
         const userId = Number(req.params.userId)
-
+        
         if (!userId) {
             return res.status(404).send('userId not found')
         }
         const getData = await expenseEntity.findAll({
             where: {
                 userId: userId
-            }
+            }, 
+            order: [['createdAt', 'DESC']]
         })
         res.status(200).send({
             message: "All Expense list this user",

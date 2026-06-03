@@ -6,6 +6,7 @@ const db=require('./models/db')
 const asociation=require('./models/asociation')
 const loginSignupRoute=require('./routes/loginSignupRoutes')
 const expenseRoutes=require('./routes/expenseRotes')
+const errormiddleware=require('./middleware/errormiddleware')
 
 const app=express()
 const port=5000
@@ -14,6 +15,7 @@ app.use(express.json())
 app.use(cors())
 app.use('/user',loginSignupRoute)
 app.use('/expense',expenseRoutes)
+app.use(errormiddleware)
 
 app.get('/',(req,res)=>{
     res.send('Home page')

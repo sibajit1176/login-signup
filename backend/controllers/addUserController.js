@@ -54,7 +54,8 @@ const loginUser=async(req,res)=>{
             })
         }
         return res.status(200).send({
-                message:`${findUser.userName} loggedin`
+                message:`${findUser.userName} loggedin`,
+                userId:findUser.id
             })
     } catch (error) {
         return res.status(500).send({
