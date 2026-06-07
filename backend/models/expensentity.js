@@ -21,6 +21,10 @@ const expenseEntity = db.define('expenseentity', {
     category: {
         type: DataTypes.STRING,
         allowNull:false
+    },
+    isActive:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:true
     }
 })
 
