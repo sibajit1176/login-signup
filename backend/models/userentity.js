@@ -19,6 +19,11 @@ const UserEntity=db.define('userEntity',{
      password:{
         type:DataTypes.STRING,
         allowNull:false
-    }
+    },
+    isPrime:{
+        type:DataTypes.BOOLEAN,
+        defaultValue:false
+    },
+    
 })
 module.exports=UserEntity

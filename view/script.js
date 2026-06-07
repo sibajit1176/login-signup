@@ -7,14 +7,19 @@ const loginContainer = document.querySelector('#loginContainer');
 
 loginLink.addEventListener('click', (e) => {
     e.preventDefault();
-
+    const token = localStorage.getItem('userdetails')
+      if(token){
+            window.location.href =`expense.html`;
+            return
+      }
     signupContainer.style.display = 'none';
     loginContainer.style.display = 'block';
 });
 
 signupLink.addEventListener('click', (e) => {
     e.preventDefault();
-
+      const token = localStorage.getItem('userdetails')
+     
     signupContainer.style.display = 'block';
     loginContainer.style.display = 'none';
 });
@@ -50,6 +55,7 @@ const addUser= async(payload)=>{
 
         signupContainer.style.display = 'none';
         loginContainer.style.display = 'block';
+         localStorage.setItem('userdetails',res.data.token)
   } catch (error) {
     console.log(error);
     
@@ -73,10 +79,19 @@ const loginuser=async(payload)=>{
  try {
     const res= await axios.post('http://localhost:5000/user/login',payload)
     alert(res.data.message)
-    window.location.href =
-            `expense.html?userId=${res.data.userId}`;
+    window.location.href =`expense.html`;
+    localStorage.setItem('userdetails',res.data.token)
  } catch (error) {
     console.log(error);
     
  }
 }
+
+window.addEventListener('load',(e)=>{
+   const token=  localStorage.getItem('userdetails')
+   if(token){
+     signupContainer.style.display = 'none';
+     window.location.href =`expense.html`;
+            return
+   }
+})

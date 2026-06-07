@@ -1,11 +1,12 @@
 const express=require('express')
 const { addExpense, getExpense, editExpense, deleteExpense } = require('../controllers/expenseController')
+const { authMiddleware } = require('../middleware/authentication')
 
 const router=express.Router()
 
 
-router.post('/addExpense',addExpense)
-router.get('/getExpense/:userId',getExpense)
+router.post('/addExpense',authMiddleware,addExpense)
+router.get('/getExpense',authMiddleware,getExpense)
 router.put('/updateExpense',editExpense)
 router.delete('/deleteExpense',deleteExpense)
 

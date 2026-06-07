@@ -3,7 +3,8 @@ const userEntity = require('../models/userentity')
 
 const addExpense = async (req, res) => {
     try {
-        const { userId, spentMoney, desc, category } = req.body
+        const userId = req.user.userId
+        const { spentMoney, desc, category } = req.body
         if (!userId) {
             return res.status(404).send('userId not found')
         }
@@ -32,20 +33,29 @@ const addExpense = async (req, res) => {
 }
 const getExpense = async (req, res) => {
     try {
-        const userId = Number(req.params.userId)
-        
-        if (!userId) {
+        const userId = req.user.userId
+        const findUser = await userEntity.findByPk(userId, {
+            attributes: [
+                'userName',
+                'userEmail',
+                'isPrime'
+            ]
+        })
+
+        if (!userId || !findUser) {
             return res.status(404).send('userId not found')
         }
         const getData = await expenseEntity.findAll({
             where: {
-                userId: userId
-            }, 
+                userId: userId,
+                  isActive:true
+            },
             order: [['createdAt', 'DESC']]
         })
         res.status(200).send({
             message: "All Expense list this user",
-            reslt: getData
+            reslt: getData,
+            findUser
         })
 
     } catch (error) {
@@ -102,7 +112,9 @@ const deleteExpense = async (req, res) => {
             return res.status(404).send('data not found')
 
         }
-        const deleteData = await expenseEntity.destroy({
+        const deleteData = await expenseEntity.update({
+            isActive:false
+        },{
             where: {
                 id: eId
             }
