@@ -1,5 +1,31 @@
 const params = new URLSearchParams(window.location.search);
+axios.interceptors.response.use(
+    (response) => response,
 
+    (error) => {
+
+        if (
+            error.response &&
+            error.response.status === 401
+        ) {
+
+            localStorage.removeItem(
+                'userdetails'
+            );
+
+            alert(
+                'Session expired. Please login again.'
+            );
+
+            window.location.href =
+                'signup.html';
+        }
+
+        return Promise.reject(
+            error
+        );
+    }
+);
 
 const getData = async () => {
     try {
