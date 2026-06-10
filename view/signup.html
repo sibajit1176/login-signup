@@ -63,10 +63,111 @@
                 Don't have an account?
                 <a href="#" id="signupLink">Signup</a>
             </p>
+            <p class="login-text">
+                <a href="#" id="forgotPasswordLink">Forgot Password?</a>
+            </p>
 
         </form>
 
     </div>
+   <div class="signup-container" id="forgotPasswordContainer" style="display:none;">
+
+    <!-- Email Form -->
+    <form class="signup-form" id="forgotPasswordForm">
+
+        <h2>Forgot Password</h2>
+
+        <div class="input-group">
+            <label for="forgotEmail">Email</label>
+            <input
+                type="email"
+                id="forgotEmail"
+                placeholder="Enter your registered email"
+                required
+            />
+        </div>
+
+        <button type="submit" id="sendOtpBtn">
+            Send OTP
+        </button>
+
+        <p class="login-text">
+            <a href="#" id="backToLogin">
+                Back to Login
+            </a>
+        </p>
+
+    </form>
+
+    <!-- OTP Form -->
+    <form
+        class="signup-form"
+        id="otpForm"
+        style="display:none;"
+    >
+
+        <h2>Verify OTP</h2>
+
+        <p
+            id="otpSentEmail"
+            style="
+                text-align:center;
+                margin-bottom:15px;
+                color:#666;
+            "
+        ></p>
+
+        <div class="input-group">
+            <!-- <label for="otpInput">OTP</label> -->
+            <input
+                type="text"
+                id="otpInput"
+                placeholder="Enter OTP"
+                required
+            />
+        </div>
+
+        <button type="submit" id="verifyOtp">
+            Verify OTP
+        </button>
+         <p class="login-text">
+            <a href="#" id="resendOtp">Resend OTP</a>
+        </p>
+
+    </form>
+    <form
+    class="signup-form"
+    id="resetPasswordForm"
+    style="display:none;"
+>
+
+    <h2>Reset Password</h2>
+
+    <p
+        id="resetPasswordEmail"
+        style="
+            text-align:center;
+            margin-bottom:15px;
+            color:#666;
+        "
+    ></p>
+
+    <div class="input-group">
+        <input
+            type="password"
+            id="newPassword"
+            placeholder="Enter New Password"
+            required
+        />
+    </div>
+
+    <button type="submit">
+        Update Password
+    </button>
+
+</form>
+
+</div>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <script src="./script.js"></script>
 </body>
