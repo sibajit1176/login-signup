@@ -95,8 +95,6 @@ window.addEventListener('load', (e) => {
     const payload = JSON.parse(
         atob(token.split('.')[1])
     );
-
-    console.log(payload, "=============");
     const profileBtn =
         document.querySelector('#profileBtn');
 
@@ -117,7 +115,7 @@ window.addEventListener('load', (e) => {
 
         const token =
             localStorage.getItem('userdetails');
-
+   
         const payload = JSON.parse(
             atob(token.split('.')[1])
         );
@@ -129,6 +127,8 @@ window.addEventListener('load', (e) => {
 
         document.querySelector('#modalEmail')
             .textContent = payload.useremail;
+         document.querySelector('#modalBalance')
+            .textContent = payload.Balance;
     });
     window.addEventListener('click', (e) => {
         if (e.target === profileModal) {
@@ -265,8 +265,7 @@ const getLeaderBoardData = async () => {
                 '#leaderBoardBody'
             );
 
-        tableBody.innerHTML = '';
-
+        tableBody.innerHTML = '';        
         data.forEach((item, index) => {
 
 
@@ -274,7 +273,9 @@ const getLeaderBoardData = async () => {
                 <tr>
                     <td>${index + 1}</td>
                     <td>${item.userEntity.userName}</td>
-                    <td>₹${item.totalExpense}</td>
+                    <td>₹${item.userEntity.totalAmount}</td>
+                    <td>₹${item.spentMoney}</td>
+
                 </tr>
             `;
         });

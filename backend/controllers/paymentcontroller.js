@@ -1,4 +1,4 @@
-const cashfree = require('../Service/cashfreeService')
+const cashfree = require('../config/cashfreeService')
 const paymentEntity = require('../models/paymentEntity')
 const userEntity = require('../models/userentity')
 

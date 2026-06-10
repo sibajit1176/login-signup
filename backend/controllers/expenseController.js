@@ -1,36 +1,103 @@
+const sequelize = require('../models/db')
 const expenseEntity = require('../models/expensentity')
 const userEntity = require('../models/userentity')
 
 const addExpense = async (req, res) => {
+
+    const transaction = await sequelize.transaction();
+
     try {
-        const userId = req.user.userId
-        const { spentMoney, desc, category } = req.body
+
+        const userId = req.user.userId;
+        const { spentMoney, desc, category } = req.body;
+
         if (!userId) {
-            return res.status(404).send('userId not found')
+
+            await transaction.rollback();
+
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
         }
+
         if (!spentMoney || !category) {
-            return res.status(400).send('spent money and category need')
+
+            await transaction.rollback();
+
+            return res.status(400).json({
+                success: false,
+                message: "Spent money and category are required"
+            });
         }
+
         const findUser = await userEntity.findOne({
             where: {
                 id: userId
-            }
-        })
+            },
+            transaction
+        });
+
         if (!findUser) {
-            return res.status(404).send('Wrong userId')
+
+            await transaction.rollback();
+
+            return res.status(404).json({
+                success: false,
+                message: "Invalid user"
+            });
         }
-        const addExpense = await expenseEntity.create({
-            userId, spentMoney, desc, category
-        })
-        await addExpense.save()
-        res.status(201).send({
-            message: "Expense added",
-            reslt: addExpense
-        })
+
+        if (Number(findUser.totalAmount) < Number(spentMoney)) {
+            await transaction.rollback();
+            return res.status(400).json({
+                success: false,
+                message: "Insufficient balance"
+            });
+        }
+
+        const updatedBalance =
+            Number(findUser.totalAmount) -
+            Number(spentMoney);
+
+        const expense = await expenseEntity.create(
+            {
+                userId,
+                spentMoney,
+                desc,
+                category
+            },
+            {
+                transaction
+            }
+        );
+
+        await findUser.update(
+            {
+                totalAmount: updatedBalance
+            },
+            {
+                transaction
+            }
+        );
+
+        await transaction.commit();
+
+        return res.status(201).json({
+            success: true,
+            message: "Expense added successfully",
+            expense,
+            remainingBalance: updatedBalance
+        });
+
     } catch (error) {
-        res.status(400).send(`addExpense error for:${error}`)
+        await transaction.rollback();
+        return res.status(500).json({
+            success: false,
+            message: `Add expense error: ${error.message}`
+        });
     }
-}
+};
 const getExpense = async (req, res) => {
     try {
         const userId = req.user.userId
@@ -38,7 +105,8 @@ const getExpense = async (req, res) => {
             attributes: [
                 'userName',
                 'userEmail',
-                'isPrime'
+                'isPrime',
+                'totalAmount'
             ]
         })
 
@@ -98,38 +166,101 @@ const editExpense = async (req, res) => {
     }
 }
 const deleteExpense = async (req, res) => {
+
+    const transaction = await sequelize.transaction();
+
     try {
-        const eId = req.query.eId
+
+        const eId = req.query.eId;
+
         if (!eId) {
-            return res.status(404).send('Id not found')
+
+            await transaction.rollback();
+
+            return res.status(400).json({
+                success: false,
+                message: "Expense id is required"
+            });
         }
+
         const findData = await expenseEntity.findOne({
             where: {
-                id: eId
-            }
-        })
-        if (!findData) {
-            return res.status(404).send('data not found')
+                id: eId,
+                isActive: true
+            },
+            transaction
+        });
 
+        if (!findData) {
+
+            await transaction.rollback();
+
+            return res.status(404).json({
+                success: false,
+                message: "Expense not found"
+            });
         }
-        const deleteData = await expenseEntity.update({
-            isActive:false
-        },{
+
+        const findUser = await userEntity.findOne({
             where: {
-                id: eId
+                id: findData.userId
+            },
+            transaction
+        });
+
+        if (!findUser) {
+
+            await transaction.rollback();
+
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        const newBalance =
+            Number(findUser.totalAmount || 0) +
+            Number(findData.spentMoney);
+
+        await expenseEntity.update(
+            {
+                isActive: false
+            },
+            {
+                where: {
+                    id: eId
+                },
+                transaction
             }
-        })
-        res.status(200).send({
-            message: "Expense deleted",
-            reslt: deleteData
-        })
+        );
+
+        await findUser.update(
+            {
+                totalAmount: newBalance
+            },
+            {
+                transaction
+            }
+        );
+
+        await transaction.commit();
+
+        return res.status(200).json({
+            success: true,
+            message: "Expense deleted successfully",
+            currentBalance: newBalance
+        });
 
     } catch (error) {
-        res.status(400).send(`delete expense error for:${error}`)
 
+        await transaction.rollback();
+
+        return res.status(500).json({
+            success: false,
+            message: `Delete expense error: ${error.message}`
+        });
     }
-}
-
+};
 module.exports = {
     addExpense,
     getExpense,
