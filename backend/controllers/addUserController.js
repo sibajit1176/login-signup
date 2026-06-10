@@ -69,12 +69,11 @@ const loginUser = async (req, res) => {
             userId: findUser.id,
             username: findUser.userName,
             useremail:findUser.userEmail,
-            
+            Balance:findUser.totalAmount
         }
         const token = jwt.sign(payload, publicKey, { expiresIn: '1d' })
         return res.status(200).send({
             message: `${findUser.userName} loggedin`,
-            userId: findUser.id,
             token
         })
     } catch (error) {

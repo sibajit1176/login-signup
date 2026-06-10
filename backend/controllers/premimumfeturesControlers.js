@@ -15,13 +15,13 @@ try {
                 'SUM',
                 Sequelize.col('spentMoney')
             ),
-            'totalExpense'
+            'spentMoney'
         ]
         ],
         include:[
             {
                 model:UserEntity,
-                attributes:['userName']
+                attributes:['userName','totalAmount']
             }
         ],
         group:[
@@ -30,11 +30,15 @@ try {
         ],
         order:[
             [
-                Sequelize.literal('totalExpense'),
+                Sequelize.literal('spentMoney'),
                 'DESC'
             ]
         ]
     })
+    // const getDatafromExpense=await UserEntity.findAll({
+    //     attributes:['id','userName','totalAmount'],
+    //       order: [['totalAmount', 'DESC']]
+    // })
     res.status(200).send({
         "message":"Get All expenses",
         getDatafromExpense

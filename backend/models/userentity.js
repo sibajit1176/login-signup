@@ -24,6 +24,10 @@ const UserEntity=db.define('userEntity',{
         type:DataTypes.BOOLEAN,
         defaultValue:false
     },
+    totalAmount:{
+        type:DataTypes.FLOAT,
+        defaultValue:0.0
+    }
     
 })
 module.exports=UserEntity
