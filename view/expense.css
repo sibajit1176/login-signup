@@ -154,6 +154,7 @@ body{
     padding:25px;
     border-radius:15px;
     box-shadow:0 4px 12px rgba(0,0,0,.1);
+    
 }
 
 .expense-form h2{
@@ -362,6 +363,108 @@ body{
 
 
 
+/* CREDIT HISTORY */
+
+.history-header{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    margin-bottom:15px;
+}
+
+.history-header h2{
+    color:#333;
+}
+
+.table-wrapper{
+    min-height:350px;
+}
+
+/* Scrollable tbody */
+
+.history-table{
+    width:100%;
+    border-collapse:collapse;
+    table-layout:fixed;
+}
+
+.history-table thead{
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+
+.history-table tbody{
+    display:block;
+    height:300px; /* adjust height */
+    overflow-y:auto;
+
+    /* Hide scrollbar */
+    scrollbar-width:none;
+    -ms-overflow-style:none;
+}
+
+.history-table tbody::-webkit-scrollbar{
+    display:none;
+}
+
+.history-table tbody tr{
+    display:table;
+    width:100%;
+    table-layout:fixed;
+}
+.history-table th,
+.history-table td{
+    padding:12px;
+    text-align:center;
+    border:1px solid #ddd;
+}
+
+.history-table th{
+    background:#007bff;
+    color:#fff;
+}
+
+.history-table tbody tr:nth-child(even){
+    background:#f8f9fa;
+}
+
+.history-table tbody tr:hover{
+    background:#eef5ff;
+}
+
+/* PAGINATION */
+
+.pagination{
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    gap:10px;
+    margin-top:0px;
+}
+
+.pagination button{
+    padding:8px 16px;
+    border:none;
+    border-radius:8px;
+    background:#007bff;
+    color:white;
+    cursor:pointer;
+}
+
+.pagination button:hover{
+    opacity:.9;
+}
+
+.pagination button:disabled{
+    background:#ccc;
+    cursor:not-allowed;
+}
+
+#pageInfo{
+    font-weight:bold;
+    color:#333;
+}
 
 /* ======================
    MOBILE

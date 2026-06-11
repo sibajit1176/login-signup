@@ -71,7 +71,52 @@ const addWaletBalance = async (req, res) => {
         });
     }
 };
+const getAllCreditHistory = async (req, res) => {
+    try {
 
+        const userId = req.user.userId;
+
+        const page = Number(req.query.page) || 1;
+        const limit = Number(req.query.limit) || 10;
+
+        const offset = (page - 1) * limit;
+
+        const { count, rows } =
+            await creditLogEntity.findAndCountAll({
+                where: {
+                    userId
+                },
+                attributes: [
+                    'id',
+                    'amount',
+                    'creditForm',
+                    'createdAt'
+                ],
+                order: [
+                    ['createdAt', 'DESC']
+                ],
+                limit,
+                offset
+            });
+
+        return res.status(200).json({
+            success: true,
+            totalRecords: count,
+            totalPages: Math.ceil(count / limit),
+            currentPage: page,
+            data: rows
+        });
+
+    } catch (error) {
+
+        return res.status(500).json({
+            success: false,
+            message: error.message
+        });
+
+    }
+};
 module.exports = {
-    addWaletBalance
+    addWaletBalance,
+    getAllCreditHistory
 };
