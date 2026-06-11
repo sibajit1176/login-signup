@@ -47,7 +47,7 @@
                 <strong>Email:</strong>
                 <span id="modalEmail"></span>
             </p>
-             <p class="user-info">
+            <p class="user-info">
                 <strong>Balance:</strong>
                 <span id="modalBalance"></span>
             </p>
@@ -150,6 +150,85 @@
             <h2>Expense History</h2>
 
             <div id="expenseList"></div>
+
+        </div>
+
+    </div>
+    <!-- add balance -->
+    <div class="expense-page">
+
+        <!-- LEFT SIDE -->
+        <div class="expense-form-container">
+
+            <form class="expense-form" id="addBalanceform">
+
+                <h2>Add Balance</h2>
+
+                <div class="expense-input-group">
+                    <label for="creditform">Credit Form</label>
+                    <input type="text" id="creditform" required />
+                </div>
+
+                <div class="expense-input-group">
+                    <label for="desccredit">Description</label>
+                    <input type="text" id="desccredit" />
+                </div>
+
+                <div class="expense-input-group">
+                    <label for="creditmoney">Amount</label>
+                    <input type="number" id="creditmoney" required />
+                </div>
+
+                <button type="submit" class="add-expense-btn">
+                    Add balance
+                </button>
+
+            </form>
+
+        </div>
+
+        <!-- RIGHT SIDE -->
+        <div class="expense-list-container">
+
+            <div class="history-header">
+                <h2>Credit History</h2>
+            </div>
+
+            <div class="table-wrapper">
+
+                <table class="history-table">
+
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Credit From</th>
+                            <th>Amount</th>
+                            <th>Date</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="creditHistoryBody">
+                    </tbody>
+
+                </table>
+
+            </div>
+
+            <div class="pagination">
+
+                <button id="prevBtn">
+                    Previous
+                </button>
+
+                <span id="pageInfo">
+                    Page 1
+                </span>
+
+                <button id="nextBtn">
+                    Next
+                </button>
+
+            </div>
 
         </div>
 

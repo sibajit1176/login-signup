@@ -1,4 +1,8 @@
 const params = new URLSearchParams(window.location.search);
+let currentPage = 1;
+const limit = 10;
+let userData = null;
+
 axios.interceptors.response.use(
     (response) => response,
 
@@ -37,6 +41,8 @@ const getData = async () => {
         })
         const expenseslist = edata.data.reslt
         const userDetails = edata.data.findUser;
+        userData=edata.data.findUser
+        
 
         const premiumBtn =
             document.querySelector('#premiumBtn');
@@ -113,22 +119,15 @@ window.addEventListener('load', (e) => {
     });
     profileBtn.addEventListener('click', () => {
 
-        const token =
-            localStorage.getItem('userdetails');
-   
-        const payload = JSON.parse(
-            atob(token.split('.')[1])
-        );
-
         profileModal.style.display = 'block';
 
         document.querySelector('#modalName')
-            .textContent = payload.username;
+            .textContent = userData.userName;
 
         document.querySelector('#modalEmail')
-            .textContent = payload.useremail;
-         document.querySelector('#modalBalance')
-            .textContent = payload.Balance;
+            .textContent = userData.userEmail;
+        document.querySelector('#modalBalance')
+            .textContent = userData.totalAmount;
     });
     window.addEventListener('click', (e) => {
         if (e.target === profileModal) {
@@ -138,6 +137,7 @@ window.addEventListener('load', (e) => {
     });
     getData()
     verifypayment()
+    getCreditHistory();
 })
 
 const form = document.querySelector('form')
@@ -265,7 +265,7 @@ const getLeaderBoardData = async () => {
                 '#leaderBoardBody'
             );
 
-        tableBody.innerHTML = '';        
+        tableBody.innerHTML = '';
         data.forEach((item, index) => {
 
 
@@ -349,3 +349,162 @@ expenseList.addEventListener('click', (e) => {
     }
 
 });
+
+const addBalanceform = document.querySelector('#addBalanceform');
+
+addBalanceform.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const creditform = document.querySelector('#creditform').value;
+    const desccredit = document.querySelector('#desccredit').value;
+    const creditmoney = document.querySelector('#creditmoney').value;
+
+    const token = localStorage.getItem('userdetails');
+
+    const payload = {
+        creditForm: creditform,
+        desc: desccredit,
+        amount: Number(creditmoney)
+    };
+
+    try {
+
+        const res = await axios.post(
+            'http://localhost:5000/expense/addWaletBalance',
+            payload,
+            {
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        alert(res.data.message);
+
+        addBalanceform.reset();
+        getCreditHistory();
+        getLeaderBoardData()
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert(
+            error.response?.data?.message ||
+            'Failed to add balance'
+        );
+    }
+});
+
+
+async function getCreditHistory(page = 1) {
+    try {
+
+        const token = localStorage.getItem('userdetails');
+
+        const res = await axios.get(
+            `http://localhost:5000/expense/getCreditlog?page=${page}&limit=${limit}`,
+            {
+                headers: {
+                    authorization: `Bearer ${token}`
+                }
+            }
+        );
+
+        currentPage = res.data.currentPage;
+
+        renderCreditHistory(res.data.data);
+
+        document.querySelector('#pageInfo').innerText =
+            `Page ${res.data.currentPage} of ${res.data.totalPages}`;
+
+        document.querySelector('#prevBtn').disabled =
+            currentPage === 1;
+
+        document.querySelector('#nextBtn').disabled =
+            currentPage === res.data.totalPages ||
+            res.data.totalPages === 0;
+
+    } catch (error) {
+        console.log(error);
+
+        const tbody =
+            document.querySelector('#creditHistoryBody');
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    Failed to load data
+                </td>
+            </tr>
+        `;
+    }
+}
+
+function renderCreditHistory(data) {
+
+    const tbody =
+        document.querySelector('#creditHistoryBody');
+
+    tbody.innerHTML = '';
+
+    if (!data || data.length === 0) {
+
+        tbody.innerHTML = `
+            <tr>
+                <td colspan="4">
+                    No credit history found
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    data.forEach((item, index) => {
+
+        const tr = document.createElement('tr');
+
+        tr.innerHTML = `
+            <td>
+                ${((currentPage - 1) * limit) + index + 1}
+            </td>
+
+            <td>
+                ${item.creditForm}
+            </td>
+
+            <td style="color:green;font-weight:bold;">
+                +₹${Number(item.amount).toLocaleString()}
+            </td>
+
+            <td>
+                ${new Date(item.createdAt)
+                    .toLocaleDateString('en-IN')}
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+document
+    .querySelector('#prevBtn')
+    .addEventListener('click', () => {
+
+        if (currentPage > 1) {
+            getCreditHistory(currentPage - 1);
+        }
+
+    });
+
+document
+    .querySelector('#nextBtn')
+    .addEventListener('click', () => {
+
+        getCreditHistory(currentPage + 1);
+
+    });
+
+// Initial load
+
